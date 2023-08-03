@@ -1,28 +1,37 @@
+from dataclasses import dataclass, field
+
 import pygame as pg
 
 from constants import SQUARE_WIDTH, SQUARE_HEIGHT
+from square import Square
 
 
+@dataclass
 class Snake:
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.head = pg.Rect(self.x, self.y, SQUARE_WIDTH, SQUARE_HEIGHT)
-        self.tail = []
+    position: tuple[int, int]
+    tail: list[Square] = field(default_factory=list)
+
+    head: Square = None
+
+    def __post_init__(self):
+        self.head = Square(self.position, (SQUARE_WIDTH, SQUARE_HEIGHT))
+        self.tail.append(self.head)
 
     def draw(self, screen):
-        screen.fill('purple')
-        pg.draw.rect(screen, 'green', self.head)
+        for square in self.tail:
+            square.draw(screen)
 
     def move(self, key):
+        x, y = self.position
         if key == pg.K_UP:
-            self.y -= SQUARE_HEIGHT
+            y -= SQUARE_HEIGHT
         if key == pg.K_DOWN:
-            self.y += SQUARE_HEIGHT
+            y += SQUARE_HEIGHT
         if key == pg.K_RIGHT:
-            self.x += SQUARE_WIDTH
+            x += SQUARE_WIDTH
         if key == pg.K_LEFT:
-            self.x -= SQUARE_WIDTH
-        print(f'My position {self.x}, {self.y}')
-        self.head = pg.Rect(self.x, self.y, SQUARE_WIDTH, SQUARE_HEIGHT)
+            x -= SQUARE_WIDTH
+        self.position = (x, y)
+        print(f'My position {self.position}')
+        self.head.position = self.position
