@@ -1,57 +1,84 @@
 # Example file showing a basic pygame "game loop"
+import random
+from typing import Type
+
 import pygame
 
 from apple import generate_apple
 from constants import WIDTH, HEIGHT
 from snake import Snake
+from square import Shape, Triangle
 from utils import generate_position
+from snake_collision import wall_collision, apple_collision
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Snake')
 
-clock = pygame.time.Clock()
-running = True
+def game(obj: Type[Shape]):
 
-snake = Snake(generate_position())
+    # pygame setup
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('Snake')
 
-snake_speed = 0
-snake_vector = pygame.K_RIGHT
+    clock = pygame.time.Clock()
+    running = True
 
-apple = generate_apple(snake.tail)
+    vector_choice = ('RIGHT', 'LEFT', 'DOWN', 'UP')
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                snake_vector = pygame.K_UP
-            if event.key == pygame.K_DOWN:
-                snake_vector = pygame.K_DOWN
-            if event.key == pygame.K_RIGHT:
-                snake_vector = pygame.K_RIGHT
-            if event.key == pygame.K_LEFT:
-                snake_vector = pygame.K_LEFT
+    snake = Snake(
+        obj_type=obj,
+        position=generate_position(),
+        vector=random.choice(vector_choice)
+    )
 
-    snake_speed += 1
-    if snake_speed > 20:
-        snake.move(snake_vector)
-        snake_speed = 0
+    snake_speed = 0
+    snake_speed_limit = 20
 
-    # fill the screen with a color to wipe away anything from last frame
+    apple = generate_apple(obj, snake.tail)
 
-    screen.fill("purple")
+    while running and snake.alive:
+        # poll for events
+        # pygame.QUIT event means the user clicked X to close your window
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    if snake.vector != 'DOWN':
+                        snake.vector = 'UP'
+                if event.key == pygame.K_DOWN:
+                    if snake.vector != 'UP':
+                        snake.vector = 'DOWN'
+                if event.key == pygame.K_RIGHT:
+                    if snake.vector != 'LEFT':
+                        snake.vector = 'RIGHT'
+                if event.key == pygame.K_LEFT:
+                    if snake.vector != 'RIGHT':
+                        snake.vector = 'LEFT'
 
-    apple.draw(screen)
+        snake_speed += 1
+        if snake_speed > snake_speed_limit:
+            snake.move()
+            if wall_collision(snake):
+                snake.alive = False
+            if apple_collision(apple, snake):
+                snake.eat()
+                apple = generate_apple(obj, snake.tail)
+                snake_speed_limit -= 1
+            snake_speed = 0
 
-    snake.draw(screen)
-    # flip() the display to put your work on screen
-    pygame.display.flip()
+        # fill the screen with a color to wipe away anything from last frame
 
-    clock.tick(60)  # limits FPS to 60
+        screen.fill("purple")
 
-pygame.quit()
+        apple.draw(screen)
+
+        snake.draw(screen)
+        # flip() the display to put your work on screen
+        pygame.display.flip()
+
+        clock.tick(60)  # limits FPS to 60
+
+    pygame.quit()
+
+
+game(Triangle)

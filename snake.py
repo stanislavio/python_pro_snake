@@ -1,37 +1,69 @@
 from dataclasses import dataclass, field
+from typing import Type
 
 import pygame as pg
 
 from constants import SQUARE_WIDTH, SQUARE_HEIGHT
-from square import Square
+from square import Shape
 
 
 @dataclass
 class Snake:
 
     position: tuple[int, int]
-    tail: list[Square] = field(default_factory=list)
+    obj_type: Type[Shape]
+    tail: list[Shape] = field(default_factory=list)
+    vector: str = 'RIGHT'
+    min_len: int = 3
+    alive: bool = True
 
-    head: Square = None
+    head: Shape = None
 
     def __post_init__(self):
-        self.head = Square(self.position, (SQUARE_WIDTH, SQUARE_HEIGHT))
+        self.head = self.obj_type(self.position, (SQUARE_WIDTH, SQUARE_HEIGHT))
         self.tail.append(self.head)
+        self.generate_tail()
+
+    def generate_tail(self):
+        x, y = self.position
+        for idx in range(1, self.min_len + 1):
+            if self.vector == 'RIGHT':
+                self.tail.append(self.obj_type((x - idx * SQUARE_WIDTH, y)))
+            if self.vector == 'LEFT':
+                self.tail.append(self.obj_type((x + idx * SQUARE_WIDTH, y)))
+            if self.vector == 'DOWN':
+                self.tail.append(self.obj_type((x, y - idx * SQUARE_HEIGHT)))
+            if self.vector == 'UP':
+                self.tail.append(self.obj_type((x, y + idx * SQUARE_HEIGHT)))
+
+        print(self.tail)
+
+    def eat(self):
+        self.tail.append(self.obj_type(self.tail[-1].position))
 
     def draw(self, screen):
         for square in self.tail:
             square.draw(screen)
 
-    def move(self, key):
+    def _collision_myself(self):
+        for item in self.tail[3:]:
+            if item.position == self.position:
+                self.alive = False
+                break
+
+    def move(self):
         x, y = self.position
-        if key == pg.K_UP:
+        if self.vector == 'UP':
             y -= SQUARE_HEIGHT
-        if key == pg.K_DOWN:
+        if self.vector == 'DOWN':
             y += SQUARE_HEIGHT
-        if key == pg.K_RIGHT:
+        if self.vector == 'RIGHT':
             x += SQUARE_WIDTH
-        if key == pg.K_LEFT:
+        if self.vector == 'LEFT':
             x -= SQUARE_WIDTH
+
         self.position = (x, y)
-        print(f'My position {self.position}')
+        self._collision_myself()
+        for idx in reversed(range(1, len(self.tail))):
+            self.tail[idx].position = self.tail[idx - 1].position
         self.head.position = self.position
