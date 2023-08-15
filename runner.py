@@ -78,4 +78,6 @@ def game(obj: Type[Shape]):
     pygame.quit()
 
 
+print("Game is started with triangle")
 game(Triangle)
+print("Game over")
