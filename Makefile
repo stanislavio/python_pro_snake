@@ -1,7 +1,7 @@
 
 
 check:
-	poetry run pylint python_pro_snake --recursive=y
+	poetry run pylint *.py --recursive=y
 
 format:
 	poetry run black .
