@@ -10,7 +10,6 @@ from snake import Snake
 from snake_collision import apple_collision, wall_collision
 from square import Shape, Triangle
 from utils import generate_position
-import datetime
 
 
 def game(obj: Type[Shape]):
