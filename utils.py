@@ -1,6 +1,6 @@
 import random
 
-from constants import SQUARE_WIDTH, SQUARE_HEIGHT
+from constants import SQUARE_HEIGHT, SQUARE_WIDTH
 
 
 def generate_position():

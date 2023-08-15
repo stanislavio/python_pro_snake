@@ -1,19 +1,20 @@
+"""
+This module is for Snake template class
+"""
+
 from dataclasses import dataclass, field
 from typing import Type
 
-import pygame as pg
-
-from constants import SQUARE_WIDTH, SQUARE_HEIGHT
+from constants import SQUARE_HEIGHT, SQUARE_WIDTH
 from square import Shape
 
 
 @dataclass
 class Snake:
-
     position: tuple[int, int]
     obj_type: Type[Shape]
     tail: list[Shape] = field(default_factory=list)
-    vector: str = 'RIGHT'
+    vector: str = "RIGHT"
     min_len: int = 3
     alive: bool = True
 
@@ -27,13 +28,13 @@ class Snake:
     def generate_tail(self):
         x, y = self.position
         for idx in range(1, self.min_len + 1):
-            if self.vector == 'RIGHT':
+            if self.vector == "RIGHT":
                 self.tail.append(self.obj_type((x - idx * SQUARE_WIDTH, y)))
-            if self.vector == 'LEFT':
+            if self.vector == "LEFT":
                 self.tail.append(self.obj_type((x + idx * SQUARE_WIDTH, y)))
-            if self.vector == 'DOWN':
+            if self.vector == "DOWN":
                 self.tail.append(self.obj_type((x, y - idx * SQUARE_HEIGHT)))
-            if self.vector == 'UP':
+            if self.vector == "UP":
                 self.tail.append(self.obj_type((x, y + idx * SQUARE_HEIGHT)))
 
         print(self.tail)
@@ -53,13 +54,13 @@ class Snake:
 
     def move(self):
         x, y = self.position
-        if self.vector == 'UP':
+        if self.vector == "UP":
             y -= SQUARE_HEIGHT
-        if self.vector == 'DOWN':
+        if self.vector == "DOWN":
             y += SQUARE_HEIGHT
-        if self.vector == 'RIGHT':
+        if self.vector == "RIGHT":
             x += SQUARE_WIDTH
-        if self.vector == 'LEFT':
+        if self.vector == "LEFT":
             x -= SQUARE_WIDTH
 
         self.position = (x, y)

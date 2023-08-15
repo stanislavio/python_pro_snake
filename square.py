@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import pygame as pg
 
-from constants import SQUARE_WIDTH, SQUARE_HEIGHT
+from constants import SQUARE_HEIGHT, SQUARE_WIDTH
 
 
 @dataclass
@@ -11,22 +11,20 @@ class Shape(ABC):
     position: tuple[int, int]
     size: tuple[int, int] = (SQUARE_WIDTH, SQUARE_HEIGHT)
 
-    color: str = 'green'
+    color: str = "green"
 
     @abstractmethod
     def draw(self, screen):
-        raise NotImplemented
+        raise NotImplementedError()
 
 
 class Square(Shape):
-
     def draw(self, screen):
         w, h = self.size
         pg.draw.rect(screen, self.color, pg.Rect(*self.position, w - 1, h - 1))
 
 
 class Circle(Shape):
-
     def draw(self, screen):
         w, h = self.size
         x, y = self.position
@@ -35,7 +33,6 @@ class Circle(Shape):
 
 
 class Triangle(Shape):
-
     def draw(self, screen):
         x, y = self.position
         w, h = self.size

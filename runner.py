@@ -5,29 +5,26 @@ from typing import Type
 import pygame
 
 from apple import generate_apple
-from constants import WIDTH, HEIGHT
+from constants import HEIGHT, WIDTH
 from snake import Snake
+from snake_collision import apple_collision, wall_collision
 from square import Shape, Triangle
 from utils import generate_position
-from snake_collision import wall_collision, apple_collision
 
 
 def game(obj: Type[Shape]):
-
     # pygame setup
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption('Snake')
+    pygame.display.set_caption("Snake")
 
     clock = pygame.time.Clock()
     running = True
 
-    vector_choice = ('RIGHT', 'LEFT', 'DOWN', 'UP')
+    vector_choice = ("RIGHT", "LEFT", "DOWN", "UP")
 
     snake = Snake(
-        obj_type=obj,
-        position=generate_position(),
-        vector=random.choice(vector_choice)
+        obj_type=obj, position=generate_position(), vector=random.choice(vector_choice)
     )
 
     snake_speed = 0
@@ -43,17 +40,17 @@ def game(obj: Type[Shape]):
                 running = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    if snake.vector != 'DOWN':
-                        snake.vector = 'UP'
+                    if snake.vector != "DOWN":
+                        snake.vector = "UP"
                 if event.key == pygame.K_DOWN:
-                    if snake.vector != 'UP':
-                        snake.vector = 'DOWN'
+                    if snake.vector != "UP":
+                        snake.vector = "DOWN"
                 if event.key == pygame.K_RIGHT:
-                    if snake.vector != 'LEFT':
-                        snake.vector = 'RIGHT'
+                    if snake.vector != "LEFT":
+                        snake.vector = "RIGHT"
                 if event.key == pygame.K_LEFT:
-                    if snake.vector != 'RIGHT':
-                        snake.vector = 'LEFT'
+                    if snake.vector != "RIGHT":
+                        snake.vector = "LEFT"
 
         snake_speed += 1
         if snake_speed > snake_speed_limit:

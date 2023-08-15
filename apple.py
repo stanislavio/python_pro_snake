@@ -9,4 +9,4 @@ def generate_apple(obj: Type[Shape], snake_tail: list[Shape]) -> Shape:
     while position in [item.position for item in snake_tail]:
         position = generate_position()
 
-    return obj(position, color='red')
+    return obj(position, color="red")

@@ -10,8 +10,32 @@ packages = [{include = "python_pro_snake"}]
 python = "^3.10"
 requests = "^2.31.0"
 pygame = "^2.5.0"
+pylint = "^2.17.5"
+black = "^23.7.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.messages_control]
+max-line-length = 89
+disable = [
+    "import-error",
+    "missing-module-docstring",
+    "missing-function-docstring",
+    "missing-class-docstring",
+    "no-member",
+    "too-few-public-methods",
+    "invalid-name",
+    "too-many-branches"
+]
+
+[tool.pylint.design]
+# limiting the number of returns might discourage
+# the use of guard clauses. So we increase the
+# allowed number of returns from 6 to 8
+max-returns = 8
+
+[tool.pylint.format]
+max-module-lines = 1000
