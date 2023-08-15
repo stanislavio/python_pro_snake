@@ -80,3 +80,4 @@ def game(obj: Type[Shape]):
 
 print("Game is started with triangle")
 game(Triangle)
+print("Game over")
