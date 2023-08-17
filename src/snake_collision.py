@@ -1,6 +1,6 @@
-from constants import HEIGHT, WIDTH
-from snake import Snake
-from square import Shape
+from src.constants import HEIGHT, WIDTH
+from src.snake import Snake
+from src.square import Shape
 
 
 def wall_collision(snake: Snake) -> bool:
@@ -9,4 +9,4 @@ def wall_collision(snake: Snake) -> bool:
 
 
 def apple_collision(apple: Shape, snake: Snake) -> bool:
-    return apple.position == snake.position
+    return any(apple.position == item.position for item in snake.tail)

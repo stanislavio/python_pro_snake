@@ -1,4 +1,4 @@
-name: CheckWithPylint
+name: check_code_quality
 
 on: [pull_request]
 
@@ -21,3 +21,5 @@ jobs:
         poetry install
     - name: Analysing the code with pylint
       run: make check
+    - name: Run all tests
+      run: make test

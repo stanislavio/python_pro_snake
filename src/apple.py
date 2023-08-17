@@ -1,7 +1,7 @@
 from typing import Type
 
-from square import Shape
-from utils import generate_position
+from src.square import Shape
+from src.utils import generate_position
 
 
 def generate_apple(obj: Type[Shape], snake_tail: list[Shape]) -> Shape:
