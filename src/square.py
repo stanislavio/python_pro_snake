@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import pygame as pg
 
-from constants import SQUARE_HEIGHT, SQUARE_WIDTH
+from src.constants import SQUARE_HEIGHT, SQUARE_WIDTH
 
 
 @dataclass
