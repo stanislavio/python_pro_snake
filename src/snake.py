@@ -17,6 +17,8 @@ class Snake:
     vector: str = "RIGHT"
     min_len: int = 3
     alive: bool = True
+    speed: int = 0
+    speed_limit: float = 20
 
     head: Shape = None
 
