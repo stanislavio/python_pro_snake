@@ -5,8 +5,8 @@ This module is for Snake template class
 from dataclasses import dataclass, field
 from typing import Type
 
-from constants import SQUARE_HEIGHT, SQUARE_WIDTH
-from square import Shape
+from src.constants import SQUARE_HEIGHT, SQUARE_WIDTH
+from src.square import Shape
 
 
 @dataclass
@@ -36,8 +36,6 @@ class Snake:
                 self.tail.append(self.obj_type((x, y - idx * SQUARE_HEIGHT)))
             if self.vector == "UP":
                 self.tail.append(self.obj_type((x, y + idx * SQUARE_HEIGHT)))
-
-        print(self.tail)
 
     def eat(self):
         self.tail.append(self.obj_type(self.tail[-1].position))
