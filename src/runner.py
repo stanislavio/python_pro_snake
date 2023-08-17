@@ -24,7 +24,12 @@ def game_setup():
     return screen, clock
 
 
-def generate_snake(obj: Type[Shape]):
+def generate_snake(obj: Type[Shape]) -> Snake:
+    """
+    This function have to return new Snake object
+    :param obj: This is object type of snake element for example Square or Circle
+    :return: Snake object with random position and random vector
+    """
     return Snake(
         obj_type=obj, position=generate_position(), vector=random.choice(VECTOR_CHOICES)
     )
